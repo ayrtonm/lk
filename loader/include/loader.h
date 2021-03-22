@@ -4,7 +4,7 @@
 
 __BEGIN_CDECLS
 
-void run_loader(void);
+int run_loader(void);
 
 __END_CDECLS
 
