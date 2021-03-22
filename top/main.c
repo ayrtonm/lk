@@ -21,6 +21,7 @@
 #include <lk/compiler.h>
 #include <lk/debug.h>
 #include <lk/init.h>
+#include <loader.h>
 #include <platform.h>
 #include <string.h>
 #include <target.h>
@@ -134,6 +135,7 @@ static int bootstrap2(void *arg) {
     apps_init();
 
     lk_primary_cpu_init_level(LK_INIT_LEVEL_APPS, LK_INIT_LEVEL_LAST);
+    run_loader();
 
     return 0;
 }

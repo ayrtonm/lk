@@ -7,6 +7,7 @@ MODULE_DEPS := \
 	arch \
 	dev \
 	kernel \
+	loader \
 	platform \
 	target
 
