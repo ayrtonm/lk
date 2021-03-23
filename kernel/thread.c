@@ -285,6 +285,7 @@ status_t thread_resume(thread_t *t) {
             resched = true;
     }
 
+    vmm_set_active_aspace(t->aspace);
     wakeup_cpu_for_thread(t);
 
     THREAD_UNLOCK(state);

@@ -20,6 +20,7 @@
  * @{
  */
 #include <kernel/timer.h>
+#include <kernel/vm.h>
 
 #include <assert.h>
 #include <kernel/debug.h>
@@ -233,8 +234,19 @@ static enum handler_return timer_tick(void *arg, lk_time_t now) {
 
         LTRACEF("timer %p firing callback %p, arg %p\n", timer, timer->callback, timer->arg);
         KEVLOG_TIMER_CALL(timer->callback, timer->arg);
+        // TODO: Get timer callbacks to use a specified aspace.
+        // Is there anything preventing interrupt contexts from running from user space?
+        //vmm_aspace_t *old_aspace;
+        //if (timer->aspace) {
+        //    old_aspace = get_current_thread()->aspace;
+        //    vmm_set_active_aspace(timer->aspace);
+        //}
         if (timer->callback(timer, now, timer->arg) == INT_RESCHEDULE)
             ret = INT_RESCHEDULE;
+
+        //if (timer->aspace) {
+        //    vmm_set_active_aspace(old_aspace);
+        //}
 
         /* it may have been requeued or periodic, grab the lock so we can safely inspect it */
         spin_lock(&timer_lock);

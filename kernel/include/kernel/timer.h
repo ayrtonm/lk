@@ -11,6 +11,11 @@
 #include <lk/list.h>
 #include <sys/types.h>
 
+#if WITH_KERNEL_VM
+/* forward declaration */
+typedef struct vmm_aspace vmm_aspace_t;
+#endif
+
 __BEGIN_CDECLS
 
 void timer_init(void);
@@ -29,6 +34,7 @@ typedef struct timer {
 
     timer_callback callback;
     void *arg;
+    vmm_aspace_t *aspace;
 } timer_t;
 
 #define TIMER_INITIAL_VALUE(t) \

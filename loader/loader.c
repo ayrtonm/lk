@@ -42,12 +42,6 @@ static uint64_t file_size(filehandle *handle) {
     return stat.size;
 }
 
-static int runner(void *entry) {
-    int (*start)(int argc, char *argv[]) = entry;
-    int ret = start(1, NULL);
-    return 0;
-}
-
 static int run_isolated_ELF(const char *name) {
     status_t err;
     // Arbitrarily limit full path to 50 characters
@@ -85,9 +79,9 @@ static int run_isolated_ELF(const char *name) {
 
     // Create a new thread with ELF entry
     int (*entry)(int argc, char *argv[]) = (void *)elf_header.entry;
-    thread_t *t = thread_create(name, &runner, entry, DEFAULT_PRIORITY, DEFAULT_STACK_SIZE);
+    thread_t *t = thread_create(name, entry, aspace, DEFAULT_PRIORITY, DEFAULT_STACK_SIZE);
 
-    // Modify thread aspace
+    // Modify thread aspace for `thread_resume` to use
     t->aspace = aspace;
 
     // Kick off the thread
